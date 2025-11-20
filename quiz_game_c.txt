@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+// Structure to store quiz questions
+struct Question {
+    char question[200];
+    char optionA[50];
+    char optionB[50];
+    char optionC[50];
+    char optionD[50];
+    char correctAnswer;
+};
+
+// Function prototypes
+void displayMenu();
+void playQuiz(struct Question questions[], int totalQuestions);
+void displayQuestion(struct Question q, int questionNumber);
+void displayScore(int score, int total);
+void displayRules();
+
+int main() {
+    int choice;
+    
+    // Array of questions (Data Structure: Array of Structures)
+    struct Question questions[10] = {
+        {"What is the capital of France?", "Berlin", "Madrid", "Paris", "Rome", 'C'},
+        {"Which planet is known as the Red Planet?", "Venus", "Mars", "Jupiter", "Saturn", 'B'},
+        {"Who wrote 'Romeo and Juliet'?", "Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain", 'B'},
+        {"What is 2 + 2?", "3", "4", "5", "6", 'B'},
+        {"Which is the largest ocean?", "Atlantic", "Indian", "Arctic", "Pacific", 'D'},
+        {"How many continents are there?", "5", "6", "7", "8", 'C'},
+        {"What is the capital of Japan?", "Beijing", "Seoul", "Tokyo", "Bangkok", 'C'},
+        {"Which animal is known as the King of the Jungle?", "Tiger", "Lion", "Elephant", "Bear", 'B'},
+        {"What is the boiling point of water?", "90°C", "100°C", "110°C", "120°C", 'B'},
+        {"How many days are in a leap year?", "364", "365", "366", "367", 'C'}
+    };
+    
+    int totalQuestions = 10;
+    
+    while(1) {
+        displayMenu();
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar(); // Clear input buffer
+        
+        switch(choice) {
+            case 1:
+                displayRules();
+                break;
+            case 2:
+                playQuiz(questions, totalQuestions);
+                break;
+            case 3:
+                printf("\n========================================\n");
+                printf("Thank you for playing! Goodbye!\n");
+                printf("========================================\n");
+                exit(0);
+            default:
+                printf("\nInvalid choice! Please try again.\n");
+        }
+    }
+    
+    return 0;
+}
+
+// Function to display main menu
+void displayMenu() {
+    printf("\n\n========================================\n");
+    printf("       WELCOME TO QUIZ GAME!        \n");
+    printf("========================================\n");
+    printf("1. View Rules\n");
+    printf("2. Start Quiz\n");
+    printf("3. Exit\n");
+    printf("========================================\n");
+}
+
+// Function to display rules
+void displayRules() {
+    printf("\n========================================\n");
+    printf("              QUIZ RULES              \n");
+    printf("========================================\n");
+    printf("1. You will be asked 10 questions\n");
+    printf("2. Each correct answer = 1 point\n");
+    printf("3. Choose A, B, C, or D for each question\n");
+    printf("4. No negative marking\n");
+    printf("5. Your final score will be displayed at the end\n");
+    printf("========================================\n");
+}
+
+// Function to play the quiz
+void playQuiz(struct Question questions[], int totalQuestions) {
+    int score = 0;
+    char userAnswer;
+    
+    printf("\n========================================\n");
+    printf("         QUIZ STARTS NOW!           \n");
+    printf("========================================\n");
+    
+    // Loop through all questions
+    for(int i = 0; i < totalQuestions; i++) {
+        displayQuestion(questions[i], i + 1);
+        
+        printf("Your answer (A/B/C/D): ");
+        scanf(" %c", &userAnswer);
+        userAnswer = toupper(userAnswer); // Convert to uppercase
+        
+        // Check if answer is correct
+        if(userAnswer == questions[i].correctAnswer) {
+            printf("✓ Correct!\n");
+            score++;
+        } else {
+            printf("✗ Wrong! Correct answer is: %c\n", questions[i].correctAnswer);
+        }
+        
+        printf("----------------------------------------\n");
+    }
+    
+    // Display final score
+    displayScore(score, totalQuestions);
+}
+
+// Function to display a single question
+void displayQuestion(struct Question q, int questionNumber) {
+    printf("\nQuestion %d: %s\n", questionNumber, q.question);
+    printf("A. %s\n", q.optionA);
+    printf("B. %s\n", q.optionB);
+    printf("C. %s\n", q.optionC);
+    printf("D. %s\n", q.optionD);
+}
+
+// Function to display final score
+void displayScore(int score, int total) {
+    float percentage = (score * 100.0) / total;
+    
+    printf("\n========================================\n");
+    printf("           QUIZ COMPLETED!            \n");
+    printf("========================================\n");
+    printf("Your Score: %d / %d\n", score, total);
+    printf("Percentage: %.2f%%\n", percentage);
+    
+    if(percentage >= 80) {
+        printf("Grade: Excellent! 🌟\n");
+    } else if(percentage >= 60) {
+        printf("Grade: Good! 👍\n");
+    } else if(percentage >= 40) {
+        printf("Grade: Average 📚\n");
+    } else {
+        printf("Grade: Need Improvement 💪\n");
+    }
+    
+    printf("========================================\n");
+}
